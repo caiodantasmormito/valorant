@@ -1,0 +1,80 @@
+name: valorant
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.1
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  dio: ^5.8.0+1
+  flutter_bloc: ^9.0.0
+  provider: ^6.1.2
+  shared_preferences: ^2.5.2
+  go_router: ^14.8.0
+  equatable: ^2.0.7
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
+  flutter_lints: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  image_path_android: "assets/icons/ic_appicon.png"
+  image_path_ios: "assets/icons/ic_appicon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  
+flutter_native_splash:
+  color: "#0F1923"
+  image: assets/icons/ic_appicon.png
+  android: true
+  ios: true
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill
+
+  android_12:
+    image: assets/icons/ic_appicon.png
+    icon_background_color: "#0F1923"
+    image_dark: assets/icons/ic_appicon.png
+    icon_background_color_dark: "#121212"
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+
+  fonts:
+  - family: ProductSans
+    fonts:
+    - asset: assets/fonts/Product-Sans-Regular.ttf
+    - asset: assets/fonts/Product-Sans-Italic.ttf
+      style: italic
+    - asset: assets/fonts/Product-Sans-Bold.ttf
+      weight: 700
+  - family: Rubik
+    fonts:
+    - asset: assets/fonts/Rubik-Regular.ttf
+    - asset: assets/fonts/Rubik-Italic.ttf
+      style: italic
+    - asset: assets/fonts/Rubik-Bold.ttf
+      weight: 700
+    - asset: assets/fonts/Rubik-Medium.ttf
+     
+
+ 
