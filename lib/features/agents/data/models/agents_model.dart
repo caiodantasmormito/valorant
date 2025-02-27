@@ -11,7 +11,7 @@ class AgentsModel extends AgentsEntity {
       required super.fullPortrait,
       required super.background,
       required super.backgroundGradientColors,
-      super.role,
+      required super.role,
       required super.abilities});
 
   factory AgentsModel.fromMap(Map<String, dynamic> map) {
@@ -33,7 +33,7 @@ class AgentsModel extends AgentsEntity {
       fullPortrait: map['fullPortrait'] ?? '',
       background: map['background'] ?? '',
       backgroundGradientColors: backgroundGradientColors,
-      role: role,
+      role: role!,
       abilities: abilities,
     );
   }

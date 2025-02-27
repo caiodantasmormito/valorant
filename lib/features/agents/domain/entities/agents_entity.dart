@@ -10,7 +10,7 @@ class AgentsEntity extends Equatable {
   final String fullPortrait;
   final String background;
   final List<String> backgroundGradientColors;
-  final RoleEntity? role;
+  final RoleEntity role;
   final List<AbilityEntity> abilities;
 
   const AgentsEntity({
@@ -21,7 +21,7 @@ class AgentsEntity extends Equatable {
     required this.fullPortrait,
     required this.background,
     required this.backgroundGradientColors,
-    this.role,
+    required this.role,
     required this.abilities,
   });
 

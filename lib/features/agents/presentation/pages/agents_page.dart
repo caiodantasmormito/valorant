@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:valorant/features/agents/presentation/cubit/get_agents_cubit.dart';
+import 'package:valorant/features/agents_details/presentation/pages/agent_details_page.dart';
 
 class AgentsPage extends StatefulWidget {
   const AgentsPage({super.key});
@@ -10,117 +14,171 @@ class AgentsPage extends StatefulWidget {
   State<AgentsPage> createState() => _AgentsPageState();
 }
 
-class _AgentsPageState extends State<AgentsPage> {
+class _AgentsPageState extends State<AgentsPage>
+    with SingleTickerProviderStateMixin {
   late final GetAgentsCubit _getAgentsCubit;
+  late TabController _tabController;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _getAgentsCubit = context.read<GetAgentsCubit>()..getAgents();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Agentes Valorant'),
-        backgroundColor: Colors.white,
-      ),
-      body: BlocBuilder<GetAgentsCubit, GetAgentsState>(
-        bloc: _getAgentsCubit,
-        builder: (context, state) {
-          if (state is GetAgentsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is GetAgentsError) {
-            return Center(
-              child: Text(state.message!),
-            );
-          }
-          if (state is GetAgentsSuccess) {
-            if (state.data.isEmpty) {
+      appBar: AppBar(),
+      body: SafeArea(
+        child: BlocBuilder<GetAgentsCubit, GetAgentsState>(
+          bloc: _getAgentsCubit,
+          builder: (context, state) {
+            if (state is GetAgentsLoading) {
               return const Center(
-                child: Text('Nenhum agente encontrado.'),
+                child: CircularProgressIndicator(),
               );
             }
-            return Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Agentes',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF999999),
-                        ),
-                      ),
-                    ],
+            if (state is GetAgentsError) {
+              return Center(
+                child: Text(state.message!),
+              );
+            }
+            if (state is GetAgentsSuccess) {
+              if (state.data.isEmpty) {
+                return const Center(
+                  child: Text('Nenhum agente encontrado.'),
+                );
+              }
+              return _buildHomeView(state);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHomeView(GetAgentsSuccess state) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          children: [
+            Center(
+              child: SizedBox(
+                height: 64,
+                width: 64,
+                child: SvgPicture.asset('assets/icons/valorant_icon.svg'),
+              ),
+            ),
+            const Text(
+              "Choose your \nAgent",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 32),
+            ),
+            _gridCards(state),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _gridCards(GetAgentsSuccess state) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.data.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisSpacing: 10,
+        childAspectRatio: 0.8,
+        crossAxisSpacing: 10,
+        crossAxisCount: 2,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            context.push(DetailScreen.routeName, extra: state.data[index]);
+          },
+          child: Stack(
+            children: [
+              Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.01)
+                  ..rotateY(-0.06)
+                  ..rotateX(-0.1),
+                alignment: FractionalOffset.bottomLeft,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Colors.purple,
+                        Colors.deepPurple,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                Expanded(
-                    child: ListView.builder(
-                  itemCount: state.data.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: CircleAvatar(
-                              backgroundColor: const Color(0XFFBFBFBF),
-                              // ignore: unnecessary_null_comparison
-                              child: state.data[index].displayIcon != null
-                                  ? Image.network(
-                                      state.data[index].displayIcon,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return const Icon(Icons.error);
-                                      },
-                                    )
-                                  : const Icon(Icons.error),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.data[index].displayName,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  state.data[index].description,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              state.data[index].role!.displayName,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: CachedNetworkImage(
+                  imageUrl: state.data[index].displayIcon,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, color: Colors.white),
+                ),
+              ),
+              Positioned(
+                left: 10,
+                bottom: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.data[index].displayName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        letterSpacing: 2.0,
                       ),
-                    );
-                  },
-                )),
-              ],
-            );
-          }
-          return const SizedBox.shrink();
-        },
-      ),
+                    ),
+                    Text(
+                      state.data[index].role.displayName ?? "",
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
