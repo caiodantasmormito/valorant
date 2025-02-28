@@ -6,6 +6,7 @@ import 'package:valorant/core/routes/routes.dart';
 import 'package:valorant/core/utils/app_theme.dart';
 import 'package:valorant/core/utils/colors.dart';
 import 'package:valorant/features/agents/core/agents_providers.dart';
+import 'package:valorant/features/maps/core/maps_providers.dart';
 import 'package:valorant/main.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //debugInvertOversizedImages = true;
     return MultiProvider(
       providers: [
         Provider(
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ...AgentsInjection.providers,
+        ...MapsInjection.providers,
       ],
       child: MaterialApp.router(
         color: AppColors.background,

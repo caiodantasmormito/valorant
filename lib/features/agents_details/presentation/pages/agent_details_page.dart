@@ -1,12 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:valorant/features/agents/domain/entities/agents_entity.dart';
 import 'package:valorant/features/agents_details/presentation/widget/ability_widget.dart';
 
-class DetailScreen extends StatelessWidget {
+class AgentDetailsPage extends StatelessWidget {
   final AgentsEntity agent;
   static const String routeName = '/details';
 
-  const DetailScreen({super.key, required this.agent});
+  const AgentDetailsPage({super.key, required this.agent});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class DetailScreen extends StatelessWidget {
       color: Colors.purple,
       child: Stack(
         children: [
-          /*Positioned(
+          Positioned(
             left: -64,
             top: -10,
             child: SizedBox(
@@ -40,14 +41,14 @@ class DetailScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.network(
-                    agent.fullPortrait,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return CircularProgressIndicator();
-                    },
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                  child: CachedNetworkImage(
+                    imageUrl: agent.displayIcon,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error, color: Colors.white),
                   ),
                 ),
               ),
@@ -71,7 +72,7 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),*/
+          ),
           Positioned.fill(
             child: Align(
               alignment: Alignment.centerLeft,

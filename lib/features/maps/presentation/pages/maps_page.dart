@@ -3,25 +3,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:valorant/core/widgets/grid_card_widget.dart';
-import 'package:valorant/features/agents/presentation/cubit/get_agents_cubit.dart';
 import 'package:valorant/features/agents_details/presentation/pages/agent_details_page.dart';
+import 'package:valorant/features/maps/presentation/cubit/get_maps_cubit.dart';
 
-class AgentsPage extends StatefulWidget {
-  const AgentsPage({super.key});
-  static const String routeName = '/agents';
+class MapsPage extends StatefulWidget {
+  const MapsPage({super.key});
+  static const String routeName = '/maps';
 
   @override
-  State<AgentsPage> createState() => _AgentsPageState();
+  State<MapsPage> createState() => _MapsPageState();
 }
 
-class _AgentsPageState extends State<AgentsPage>
+class _MapsPageState extends State<MapsPage>
     with SingleTickerProviderStateMixin {
-  late final GetAgentsCubit _getAgentsCubit;
+  late final GetMapsCubit _getMapsCubit;
 
   @override
   void initState() {
     super.initState();
-    _getAgentsCubit = context.read<GetAgentsCubit>()..getAgents();
+    _getMapsCubit = context.read<GetMapsCubit>()..getMaps();
   }
 
   @override
@@ -29,23 +29,23 @@ class _AgentsPageState extends State<AgentsPage>
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
-        child: BlocBuilder<GetAgentsCubit, GetAgentsState>(
-          bloc: _getAgentsCubit,
+        child: BlocBuilder<GetMapsCubit, GetMapsState>(
+          bloc: _getMapsCubit,
           builder: (context, state) {
-            if (state is GetAgentsLoading) {
+            if (state is GetMapsLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (state is GetAgentsError) {
+            if (state is GetMapsError) {
               return Center(
                 child: Text(state.message!),
               );
             }
-            if (state is GetAgentsSuccess) {
+            if (state is GetMapsSuccess) {
               if (state.data.isEmpty) {
                 return const Center(
-                  child: Text('Nenhum agente encontrado.'),
+                  child: Text('Nenhum mapa encontrado.'),
                 );
               }
               return _buildHomeView(state);
@@ -57,7 +57,7 @@ class _AgentsPageState extends State<AgentsPage>
     );
   }
 
-  Widget _buildHomeView(GetAgentsSuccess state) {
+  Widget _buildHomeView(GetMapsSuccess state) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -71,7 +71,7 @@ class _AgentsPageState extends State<AgentsPage>
               ),
             ),
             const Text(
-              "Choose your \nAgent",
+              "Choose your \nMap",
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
@@ -80,9 +80,9 @@ class _AgentsPageState extends State<AgentsPage>
             ),
             GridCardsWidget(
               data: state.data,
-              getImageUrl: (agent) => agent.displayIcon,
-              getTitle: (agent) => agent.displayName,
-              getSubTitle: (agent) => agent.role.displayName,
+              getImageUrl: (map) => map.splash,
+              getTitle: (map) => map.displayName,
+              getSubTitle: (map) => map.description,
               onTap: (context, agent) =>
                   context.push(AgentDetailsPage.routeName, extra: agent),
             ),

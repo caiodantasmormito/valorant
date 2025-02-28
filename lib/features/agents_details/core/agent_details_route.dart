@@ -5,10 +5,10 @@ import 'package:valorant/features/agents_details/presentation/pages/agent_detail
 sealed class AgentDetailsRoute {
   static final List<RouteBase> routes = [
     GoRoute(
-        path: DetailScreen.routeName,
+        path: AgentDetailsPage.routeName,
         builder: (context, state) {
           final agent = state.extra as AgentsEntity;
-          return DetailScreen(agent: agent);
+          return AgentDetailsPage(agent: agent);
         }),
   ];
 }

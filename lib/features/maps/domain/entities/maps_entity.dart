@@ -1,20 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 class MapsEntity extends Equatable {
-  final String id;
+  final String description;
   final String displayName;
 
   final String splash;
 
   const MapsEntity({
-    required this.id,
+    required this.description,
     required this.displayName,
     required this.splash,
   });
 
   @override
   List<Object?> get props => [
-        id,
+        description,
         displayName,
         splash,
       ];

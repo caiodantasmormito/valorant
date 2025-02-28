@@ -9,13 +9,15 @@ class AbilitiesListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      /*leading: CachedNetworkImage(
-        imageUrl: ability.displayIcon,
+      /*leading: Image(
+        image: CachedNetworkImageProvider(ability.displayIcon),
         width: 50,
         height: 50,
-        progressIndicatorBuilder: (context, url, progress) =>
-            CircularProgressIndicator(value: progress.progress),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return CircularProgressIndicator();
+        },
+        errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
       ),*/
       title: Text(
         ability.displayName,
