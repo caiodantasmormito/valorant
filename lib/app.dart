@@ -7,6 +7,7 @@ import 'package:valorant/core/utils/app_theme.dart';
 import 'package:valorant/core/utils/colors.dart';
 import 'package:valorant/features/agents/core/agents_providers.dart';
 import 'package:valorant/features/maps/core/maps_providers.dart';
+import 'package:valorant/features/weapons/core/weapons_provider.dart';
 import 'package:valorant/main.dart';
 
 class MyApp extends StatelessWidget {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ),
         ...AgentsInjection.providers,
         ...MapsInjection.providers,
+        ...WeaponsInjection.providers,
       ],
       child: MaterialApp.router(
         color: AppColors.background,

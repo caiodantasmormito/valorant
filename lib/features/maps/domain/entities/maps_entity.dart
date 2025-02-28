@@ -5,18 +5,20 @@ class MapsEntity extends Equatable {
   final String displayName;
 
   final String splash;
+  final String displayIcon;
 
-  const MapsEntity({
-    required this.description,
-    required this.displayName,
-    required this.splash,
-  });
+  const MapsEntity(
+      {required this.description,
+      required this.displayName,
+      required this.splash,
+      required this.displayIcon});
 
   @override
   List<Object?> get props => [
         description,
         displayName,
         splash,
+        displayIcon,
       ];
 }
 

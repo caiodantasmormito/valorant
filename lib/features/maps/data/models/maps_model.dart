@@ -4,13 +4,15 @@ class MapsModel extends MapsEntity {
   const MapsModel(
       {required super.description,
       required super.displayName,
-      required super.splash});
+      required super.splash,
+      required super.displayIcon});
 
   factory MapsModel.fromMap(Map<String, dynamic> map) {
     return MapsModel(
       description: map['tacticalDescription'] ?? '',
       displayName: map['displayName'],
       splash: map['splash'],
+      displayIcon: map['displayIcon'] ?? '',
     );
   }
 }

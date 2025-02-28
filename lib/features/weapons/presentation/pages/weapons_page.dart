@@ -1,51 +1,51 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valorant/features/maps/presentation/cubit/get_maps_cubit.dart';
+import 'package:valorant/features/weapons/presentation/cubit/get_weapons_cubit.dart';
 
-class MapsPage extends StatefulWidget {
-  const MapsPage({super.key});
-  static const String routeName = '/maps';
+class WeaponsPage extends StatefulWidget {
+  const WeaponsPage({super.key});
+  static const String routeName = '/weapons';
 
   @override
-  State<MapsPage> createState() => _MapsPageState();
+  State<WeaponsPage> createState() => _WeaponsPageState();
 }
 
-class _MapsPageState extends State<MapsPage>
+class _WeaponsPageState extends State<WeaponsPage>
     with SingleTickerProviderStateMixin {
-  late final GetMapsCubit _getMapsCubit;
+  late final GetWeaponsCubit _getWeaponsCubit;
 
   @override
   void initState() {
     super.initState();
-    _getMapsCubit = context.read<GetMapsCubit>()..getMaps();
+    _getWeaponsCubit = context.read<GetWeaponsCubit>()..getWeapons();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetMapsCubit, GetMapsState>(
-      bloc: _getMapsCubit,
-      builder: (context, maps) {
-        if (maps is GetMapsLoading) {
+    return BlocBuilder<GetWeaponsCubit, GetWeaponsState>(
+      bloc: _getWeaponsCubit,
+      builder: (context, weapons) {
+        if (weapons is GetWeaponsLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if (maps is GetMapsError) {
+        if (weapons is GetWeaponsError) {
           return Center(
-            child: Text(maps.message!),
+            child: Text(weapons.message!),
           );
         }
-        if (maps is GetMapsSuccess) {
-          if (maps.data.isEmpty) {
+        if (weapons is GetWeaponsSuccess) {
+          if (weapons.data.isEmpty) {
             return const Center(
-              child: Text('Nenhum mapa encontrado.'),
+              child: Text('Nenhuma arma encontrado.'),
             );
           }
           return ListView.builder(
-            itemCount: maps.data.length,
+            itemCount: weapons.data.length,
             itemBuilder: (context, index) {
-              final map = maps.data[index];
+              final weapon = weapons.data[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: InkWell(
@@ -60,7 +60,7 @@ class _MapsPageState extends State<MapsPage>
                             children: [
                               Expanded(
                                 child: CachedNetworkImage(
-                                  imageUrl: map.displayIcon,
+                                  imageUrl: weapon.displayIcon,
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
                                           CircularProgressIndicator(
@@ -80,7 +80,7 @@ class _MapsPageState extends State<MapsPage>
                     height: MediaQuery.of(context).size.height * 0.2,
                     child: Expanded(
                       child: CachedNetworkImage(
-                        imageUrl: map.splash,
+                        imageUrl: weapon.displayIcon,
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) =>
                                 CircularProgressIndicator(

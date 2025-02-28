@@ -61,13 +61,12 @@ class AgentDetailsPage extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: AspectRatio(
                 aspectRatio: 0.75,
-                child: Image.network(
-                  agent.fullPortrait,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return CircularProgressIndicator();
-                  },
-                  errorBuilder: (context, error, stackTrace) =>
+                child: CachedNetworkImage(
+                  imageUrl: agent.fullPortrait,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, error, stackTrace) =>
                       Icon(Icons.error),
                 ),
               ),
