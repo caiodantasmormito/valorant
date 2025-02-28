@@ -63,8 +63,8 @@ class GridCardsWidget<T> extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: CachedNetworkImage(
                     imageUrl: getImageUrl(item),
-                    height: 100,
-                    width: 100,
+                    //height: 100,
+                    //width: 100,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) =>
                             CircularProgressIndicator(
