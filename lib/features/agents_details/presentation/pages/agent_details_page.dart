@@ -41,13 +41,13 @@ class AgentDetailsPage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: agent.displayIcon,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
-                    errorWidget: (context, url, error) =>
+                  child: Image(
+                    image: CachedNetworkImageProvider(agent.fullPortrait),
+                    loadingBuilder: (context, child, loadingBuilder) {
+                      if (loadingBuilder == null) return child;
+                      return CircularProgressIndicator();
+                    },
+                    errorBuilder: (context, url, error) =>
                         const Icon(Icons.error, color: Colors.white),
                   ),
                 ),

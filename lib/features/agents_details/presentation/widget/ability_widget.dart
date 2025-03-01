@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:valorant/features/agents/domain/entities/ability_entity.dart';
 
@@ -9,7 +10,7 @@ class AbilitiesListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      /*leading: Image(
+      leading: Image(
         image: CachedNetworkImageProvider(ability.displayIcon),
         width: 50,
         height: 50,
@@ -18,7 +19,7 @@ class AbilitiesListTile extends StatelessWidget {
           return CircularProgressIndicator();
         },
         errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
-      ),*/
+      ),
       title: Text(
         ability.displayName,
         style: TextStyle(
